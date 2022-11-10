@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITMO University</title>
+    <meta name="description" content="Lab 1">
+    <meta name="viewport" content="width=device-width initial-scale = 1">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+            font-weight: 400;
+        }
+        body{
+            background-image: url("../img/bg.jpg");
+            background-size: auto auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: sans-serif;
+        }
+        .header {
+            background: RGBA(255,255,255,.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);;
+            position: relative;
+            height: 65px;
+            width: 100%;
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .navbar nav{
+            position: relative;
+            width:1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        nav h1{
+            font-family: sans-serif;
+            font-weight: 500;
+            font-size: 22px;
+            color: #2E2E2E;
+        }
+        .container{
+            color: #2E2E2E;
+            margin: auto;
+            height:100%;
+            width: 1200px;
+            border-radius: 40px;
+        }
+        .container .header{
+            display: flex;
+            align-items: center;
+            height: 250px;
+            width: 100%;
+            padding-left: 15px;
+        }
+        .container .header .info{
+            padding-left:35px ;
+            align-items: center;
+            height: 100px;
+            width: 50%;
+        }
+        .container .header .info p{
+            display: block;
+            font-weight: 300;
+            font-size: 26px;
+            font-style: italic;
+            letter-spacing: 8px;
+        }
+        .details{
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .container .header .info h2{
+            margin-top: 10px;
+            font-size: 40px;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+        .container .header .image{
+            position: relative;
+            display: flex;
+            justify-content: right;
+            height: 280px;
+            width: 50%;
+            margin: 10px 55px 10px 10px;
+        }
+        .container .content{
+            font-family: monospace;
+            padding-top: 70px;
+            padding-left:25px;
+            display: flex;
+            align-items: center;
+            width: 1120px;
+            height: 500px;
+            border-radius: 35px;
+            flex-wrap: wrap;
+        }
+        .container .content h2{
+            font-family: monospace;
+            width: 100%;
+            text-align: center;
+        }
+        .container .content .graph{
+            padding-top: 25px;
+            padding-bottom: 25px;
+            display: flex;
+            left:0;
+            align-items: center;
+            justify-content: center;
+            height:380px;
+            width: 500px;
+            margin: 10px;
+            border-radius: 45px;
+        }
+        .graph img{
+            left:0;
+            height: 100%;
+            width: auto;
+            border-radius: 5px;
+        }
+        .container .content .values{
+            position: relative;
+            display: flex;
+            align-items: center;
+            height:380px;
+            width: 500px;
+            margin: 10px;
+            padding: 30px;
+            border-radius: 45px;
+        }
+        .container .content form{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        form label{
+            font-size: 18px;
+            font-weight: 400;
+        }
+        .container .content .values .x_values{
+            display: block;
+            height: 100px;
+            width: 100%;
+        }
+        .x-btn {
+            font-weight: 700;
+            margin-top: 10px;
+            margin-right: 5px;
+            width: 35px;
+            height: 35px;
+            border: 0;
+            text-align: center;
+            box-sizing: border-box;
+            background-color: #FFFFFF;
+            cursor: pointer;
+        }
+        .selected-btn{
+            background-color: #fff;
+            border: none;
+            color: #3A8DC2;
+            box-shadow: 0 1px 3px 0 #2b1ebd, 0 1px 2px 0 #4b36e9;
+        }
+        .value_input{
+            margin-top:8px;
+            height: 40px;
+            width: 100%;
+            font-size: 16px;
+            padding-left: 10px;
+            outline-color:#bce3f6;
+            border: 1px solid #bce3f6;
+            border-radius: 10px;
+        }
+        .valid-input{
+            margin-top:8px;
+            height: 40px;
+            width: 100%;
+            font-size: 16px;
+            padding-left: 10px;
+            outline-color:#bce3f6;
+            border: 1px solid #61f4de;
+            border-radius: 10px;
+
+        }
+        .invalid-input{
+            margin-top:8px;
+            height: 40px;
+            width: 100%;
+            font-size: 16px;
+            padding-left: 10px;
+            outline-color:#bce3f6;
+            border: 1px solid #F56E6E;
+            border-radius: 10px;
+        }
+        .container .content .values .y_values{
+            height: 100px;
+            width: 45%;
+            margin-right: 5%;
+        }
+        .container .content .values .r_values{
+            height: 100px;
+            width: 45%;
+            margin-left: 5%;
+        }
+        #error{
+            margin-top:0;
+            margin-left:5px;
+            height: 15px;
+            width: 100%;
+            color:#F56E6E;
+            font-size: 12px;
+            font-weight: 400;
+            font-family: 'Roboto', sans-serif;
+        }
+        .check_button {
+            margin-top:5px;
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background-color: #6ec1f53f;
+            cursor: pointer;
+            color: #fff;
+            -webkit-transition: all .1s ease;
+        }
+        .container .result{
+            font-family: 'Roboto Mono', monospace;
+            padding-top:  25px;
+            padding-bottom: 25px;
+            margin-top: 15px;
+            text-align:center;
+            max-width: 1120px;
+            max-height: 730px;
+        }
+        .result h1{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .table{
+            width: 80%;
+            margin: auto;
+            max-height: 600px;
+            overflow-y:auto;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .table::-webkit-scrollbar{
+            width:15px;
+        }
+        .table::-webkit-scrollbar-thumb{
+            background-color: #bce3f6;
+            border-radius: 0 10px 10px 0;
+            -webkit-transition: all .3s ease-in;
+        }
+        .table::-webkit-scrollbar-thumb:hover{
+            background-color: #2479AA;
+            border-radius: 0 10px 10px 0;
+            -webkit-transition: all .3s ease-in;
+        }
+        .table::-webkit-scrollbar-track{
+        background-color: #eee;
+        }
+
+        .table table{
+            width: 100%;
+            font-family: 'Roboto Mono', monospace;
+            border-collapse: collapse;
+            font-size: 18px;
+
+            overflow: auto;
+        }
+        table thead{
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        table thead tr th:first-child{
+            border-radius: 10px 0 0 0;
+        }
+        table thead tr th:last-child{
+            border-radius: 0 0 0 0;
+        }
+        table tbody{
+            font-size: 16px;
+            overflow-y: auto;
+            overflow-x: hidden ;
+        }
+        table tbody tr:last-child td:first-child{
+            border-radius: 0 0 0 10px;
+        }
+        table tbody tr:last-child td:last-child{
+            border-radius: 0 0 10px 0;
+        }
+        table thead th{
+            background-color: #2479AA;
+            color: #fff;
+            font-weight: 300;
+            font-size: 16px;
+            font-style: italic;
+            padding-left: 5px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            border-bottom: 1px solid #dedede;
+        }
+        table thead th:first-child, table tbody tr:first-child{
+            width:50px;
+        }
+        table td{
+            font-weight: 400;
+            padding: 15px;
+        }
+        table tbody tr:nth-child(even){
+            background:#e9fdfa;
+        }
+        table tbody tr:nth-child(odd){
+            background:#fff;
+        }
+        table tbody tr td:nth-child(5), table thead tr th:nth-child(5){
+            width:250px;
+            font-size: 16px;
+        }
+        table tbody tr td:nth-child(1){
+
+            font-weight: 600;
+        }
+        table tbody tr td:nth-child(6){
+            font-size: 16px;
+        }
+        .true{
+            color:#23c552;
+        }
+        .false{
+            color: #f84f31;
+        }
+        .clear-btn{
+            margin-top:5px;
+            width: 250px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background-color: #6EC1F5;
+            cursor: pointer;
+            color: #fff;
+            -webkit-transition: all .1s ease;
+        }
+        .clear-btn:hover{
+            background-color: #5C9DF2;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <div class="info">
+            <h2>Aluko Kehinde James</h2>
+            <p class="details">Группа: P32301</p>
+            <h2 class="details">Вариант: 3301 </h2>
+        </div>
+    </div>
+    <div class="content">
+        
+        <div class="graph">
+            <img src="img/graph.png" alt="graph">
+        </div>
+        <div class="values">
+            <form id="input-form" action="php/main.php" method='get'>
+                <div class="x_values">
+                    <label>X value:</label><br>
+                    <input type="button" value="-2" name="xVal" class="x-btn"/>
+                    <input type="button" value="-1.5" name="xVal"  class="x-btn"/>
+                    <input type="button" value="-1" name="xVal"  class="x-btn"/>
+                    <input type="button" value="-0.5" name="xVal"  class="x-btn"/>
+                    <input type="button" value="0" name="xVal"  class="x-btn"/>
+                    <input type="button" value="0.5" name="xVal"  class="x-btn"/>
+                    <input type="button" value="1" name="xVal"  class="x-btn"/>
+                    <input type="button" value="1.5" name="xVal"  class="x-btn"/>
+                    <input type="button" value="2" name="xVal"  class="x-btn"/>
+                </div>
+                <div class="y_values">
+                    <label  for="y-value">Y value:</label><br>
+                    <input id="y-value" type="text" name="yVal" class="value_input" placeholder="[-3...5]">
+                </div>
+                <div class="r_values">
+                    <label for="r-value">R value:</label> <br>
+                    <input id="r-value" type="text" name="rVal" class="value_input" placeholder="[2...5]"><br>
+                </div>
+                <p id="error"></p>
+                <input id="submit" type="submit" class="check_button" value="Check" />
+            </form>
+        </div>
+    </div>
+    <div class="result">
+        <h1>RESULT</h1>
+        <div class="table">
+            <table id="result-table">
+                <thead>
+                <tr>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>R</th>
+                    <th>Date</th>
+                    <th>Runtime</th>
+                    <th>Result</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+        </div>
+        <button class="clear-btn">Clear</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
